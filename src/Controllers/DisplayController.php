@@ -1,16 +1,19 @@
 <?php
+
 namespace Controllers;
 
 use Core\Controller;
 
-class HomeController extends Controller
+class DisplayController extends Controller
 {
     public function index()
     {
-        $this->render("home",
+        $this->render("display",
             [
-                "title" => "login",
+                "title" => 'Les articles',
             ]
         );
     }
 }
+
+?>
