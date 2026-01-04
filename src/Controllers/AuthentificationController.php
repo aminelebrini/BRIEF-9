@@ -21,9 +21,18 @@
             $user = $statement->fetch(\PDO::FETCH_ASSOC);
 
             if($user && password_verify($password, $user['password'])) {
-                $_SESSION['user'] = $user;
-                header("Location: /display");
-                exit;
+                if($user['role'] === 'reader')
+                {
+                    $_SESSION['user'] = $user;
+                    header("Location: /display");
+                    exit;
+                }
+                if($user['role'] === 'admin')
+                {
+                    $_SESSION['user'] = $user;
+                    header("Location: /admindash");
+                    exit;
+                }
             } else {
                 echo "Les données sont invalides !";
             }

@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d527f32e-7165-436a-81f0-f4e615c830e2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Core/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Core/Controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controllers/AuthentificationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controllers/AuthentificationController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Router/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Router/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Views/home.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Views/home.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/connect_db.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/public/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/index.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,10 +20,11 @@
     <commands />
     <urls />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 6
-}]]></component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php" />
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="37la19tfV6L15FCtclQbD4Zp6Ve" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -37,9 +35,12 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "B9P-11-Backlog-8-Classe-Admin",
     "junie.onboarding.icon.badge.shown": "true",
+    "nodejs_package_manager_path": "npm",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
@@ -60,7 +61,11 @@
       <option name="presentableId" value="Default" />
       <updated>1767479896915</updated>
       <workItem from="1767479899376" duration="3000" />
+      <workItem from="1767530825183" duration="300000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
