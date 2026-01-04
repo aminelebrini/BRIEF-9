@@ -1,3 +1,10 @@
+<?php
+
+    namespace src\Controllers;
+
+    use data\AuthentificationController;
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -9,21 +16,18 @@
     <style>
         body { font-family: 'Outfit', sans-serif; background: #0f172a; overflow: hidden; }
         
-        /* Effet de verre */
         .glass { 
             background: rgba(255, 255, 255, 0.03); 
             backdrop-filter: blur(25px); 
             border: 1px solid rgba(255, 255, 255, 0.1); 
         }
 
-        /* Animation des Blobs */
         .blob { filter: blur(60px); position: absolute; z-index: -1; animation: move 20s infinite alternate; }
         @keyframes move {
             from { transform: translate(-10%, -10%) rotate(0deg); }
             to { transform: translate(20%, 20%) rotate(360deg); }
         }
 
-        /* Logique du Slide */
         .sliding-viewport { width: 100%; overflow: hidden; border-radius: 2.5rem; }
         .master-slider { 
             display: flex; 
@@ -53,14 +57,14 @@
                         <p class="text-slate-400 text-sm mt-2 font-light">Accédez à votre bibliothèque personnelle.</p>
                     </header>
 
-                    <form id="form-login" method="POST" class="space-y-5">
-                        <input type="email" placeholder="Email" required
+                    <form id="form-login" method="POST" action="/login" class="space-y-5">
+                        <input type="email" placeholder="Email" name="email" required
                             class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-indigo-500 focus:bg-white/10 transition-all">
                         
-                        <input type="password" placeholder="Mot de passe" required
+                        <input type="password" placeholder="Mot de passe" name="password" required
                             class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-indigo-500 focus:bg-white/10 transition-all">
 
-                        <button type="submit" class="w-full bg-white text-slate-900 font-bold py-4 rounded-2xl hover:bg-indigo-400 hover:text-white transition-all transform active:scale-95 shadow-xl shadow-white/5">
+                        <button type="submit" name="login" class="w-full bg-white text-slate-900 font-bold py-4 rounded-2xl hover:bg-indigo-400 hover:text-white transition-all transform active:scale-95 shadow-xl shadow-white/5">
                             Se Connecter
                         </button>
                     </form>
@@ -78,21 +82,21 @@
                         <p class="text-slate-400 text-sm mt-2 font-light">Commencez votre voyage littéraire.</p>
                     </header>
 
-                    <form id="form-signup" method="POST" class="space-y-5">
-                        <input type="text" placeholder="NOM" required
+                    <form id="form-signup" method="POST" action="/signup"  class="space-y-5">
+                        <input type="text" placeholder="NOM" name="nom" required
                             class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-purple-500 focus:bg-white/10 transition-all">
 
-                        <input type="text" placeholder="PRENOM" required
+                        <input type="text" placeholder="PRENOM" name="prenom" required
                             class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-purple-500 focus:bg-white/10 transition-all">
                         
                         
-                        <input type="email" placeholder="Email" required
+                        <input type="email" placeholder="Email"  name="email" required
                             class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-purple-500 focus:bg-white/10 transition-all">
                         
-                        <input type="password" placeholder="Créer un mot de passe" required
+                        <input type="password" placeholder="Créer un mot de passe" name="password" required
                             class="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-purple-500 focus:bg-white/10 transition-all">
 
-                        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 rounded-2xl hover:opacity-90 transition-all transform active:scale-95 shadow-xl shadow-indigo-500/20">
+                        <button type="submit" name="signup" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 rounded-2xl hover:opacity-90 transition-all transform active:scale-95 shadow-xl shadow-indigo-500/20">
                             Rejoindre ReadUp
                         </button>
                     </form>
