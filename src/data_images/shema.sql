@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    firstname VARCHAR(200),
-    lastname VARCHAR(200),
+    first_name VARCHAR(200),
+    last_name VARCHAR(200),
     email VARCHAR(250) UNIQUE NOT NULL,
     password VARCHAR(200) NOT NULL,
     role ENUM('admin', 'author', 'reader') DEFAULT 'reader',

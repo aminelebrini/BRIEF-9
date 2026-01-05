@@ -1,4 +1,5 @@
-<?php use Controllers\AdminController; ?>
+<?php use Controllers\AuthentificationController;
+use Controllers\AdminController; ?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -35,9 +36,11 @@
                 Catégories
             </a>
 
-            <a class="flex items-center gap-4 px-4 py-4 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                Utilisateurs
+            <a href="/admin/comments" class="flex items-center gap-4 px-4 py-4 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                </svg>
+                Commentaires
             </a>
 
             <a class="flex items-center gap-4 px-4 py-4 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-all">
@@ -54,7 +57,9 @@
                 <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=<?= $_SESSION['user']['first_name'] ?>" class="w-10 h-10 rounded-lg bg-indigo-500/20">
                 <div class="overflow-hidden">
                     <p class="text-xs font-bold truncate"><?= $_SESSION['user']['first_name'] . " " . $_SESSION['user']['last_name']?></p>
-                    <a href="/logout" class="text-[10px] text-red-400 font-bold uppercase hover:underline">Déconnexion</a>
+                    <form action="/logout" method="POST">
+                        <button type="submit" name="logout" class="text-[10px] text-red-400 font-bold uppercase hover:underline">Déconnexion</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -123,7 +128,7 @@
 
         </div>
 
-        
+        <div></div>
     </main>
 
 </body>

@@ -11,8 +11,8 @@
     {
 
         public function index() {
-        $db = new Data();
-        $conn = $db->connection();
+        
+        $conn = Data::getInstance()->connection();
 
         $query = "SELECT * FROM categories";
         $statement = $conn->prepare($query);
@@ -52,10 +52,9 @@
             if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_categorie']))
             {
                 $category_id = $_POST['remove_categorie'];
-                $db = new Data();
-                $conn = $db->connection();
+                
+                $conn = Data::getInstance()->connection();
 
-            
                 $delete_query = "DELETE FROM categories where id = ?";
                 $statement = $conn->prepare($delete_query);
                 if($statement->execute([$category_id]))

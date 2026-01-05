@@ -1,98 +1,105 @@
 <?php
-    namespace Controllers;
+namespace Controllers;
 
-    use data\Data;
+use data\Data;
 
-    class AuthentificationController{
+class AuthentificationController {
 
-        public static function login()
-        {
-            if(!isset($_POST['email']) || !isset($_POST['password'])) return;
+    public static function login()
+    {
+        if(!isset($_POST['email']) || !isset($_POST['password'])) return;
 
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-            $db = new Data();
-            $conn = $db->connection();
+        $conn = Data::getInstance()->connection();
+         
 
-            $query = "SELECT * FROM users WHERE email = ?";
-            $statement = $conn->prepare($query);
-            $statement->execute([$email]);
-            $user = $statement->fetch(\PDO::FETCH_ASSOC);
+        $query = "SELECT * FROM users WHERE email = ?";
+        $statement = $conn->prepare($query);
+        $statement->execute([$email]);
+        $user = $statement->fetch(\PDO::FETCH_ASSOC);
 
-            if($user && password_verify($password, $user['password'])) {
-                if($user['role'] === 'reader')
-                {
-                    $_SESSION['user'] = $user;
-                    header("Location: /display");
-                    exit;
-                }
-                if($user['role'] === 'admin')
-                {
-                    $_SESSION['user'] = $user;
-                    header("Location: /admindash");
-                    exit;
-                }
-            } else {
-                echo "Les données sont invalides !";
-            }
-        }
+        if($user && password_verify($password, $user['password'])) {
+            $_SESSION['user'] = $user;
 
-
-        public static function signup($firstname, $lastname, $email,$password)
-        {
-            $db = new Data();
-            $conn = $db->connection();
-
-            $existQuery = "SELECT * FROM users WHERE email = ?";
-            $statement = $conn->prepare($existQuery);
-            $statement->execute([$email]);
-
-                if ($statement->fetch()) {
-                echo '<div class="bg-red-100 fixed top-[15%] left-[50%] border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
-                    Cet email est déjà utilisé.
-                </div>';
-                return false; 
+            if($user['role'] === 'reader') {
+                header("Location: /display");
+                exit;
             }
 
+            if($user['role'] === 'admin') {
+                header("Location: /admindash");
+                exit;
+            }
 
-            $passwordhached = password_hash($password, PASSWORD_BCRYPT);
-            $registrequery = "INSERT INTO users(first_name, last_name, email, role, password) VALUES(?,?,?,?,?)";
-            $statement = $conn->prepare($registrequery);
-            if($statement->execute([$firstname, $lastname, $email, 'reader', $passwordhached]))
+            if($user['role'] === 'author')
             {
-                echo '<div class="bg-green-600 fixed top-[15%] left-[50%] border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
-                        Inscription réussie !
-                </div>';
+                header("Location: /author");
+                exit;
             }
-
+        } else {
+            echo "Les données sont invalides !";
         }
     }
 
-    if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signup']))
+    public static function signup()
     {
-        $firstname = $_POST['nom'] ?? null;
-        $lastname = $_POST['prenom'] ?? null;
-        $email = $_POST['email'] ?? null;
-        $password = $_POST['password'] ?? null;
+        if(!isset($_POST['nom'], $_POST['prenom'], $_POST['email'], $_POST['password'])) return;
 
+        $firstname = $_POST['nom'];
+        $lastname = $_POST['prenom'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-        if (AuthentificationController::signup($firstname, $lastname, $email, $password)) {
+        $conn = Data::getInstance()->connection();
+
+        $existQuery = "SELECT * FROM users WHERE email = ?";
+        $statement = $conn->prepare($existQuery);
+        $statement->execute([$email]);
+
+        if ($statement->fetch()) {
+            echo '<div class="bg-red-100 fixed top-[15%] left-[50%] border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+                    Cet email est déjà utilisé.
+                  </div>';
+            return false; 
+        }
+
+        $passwordHashed = password_hash($password, PASSWORD_BCRYPT);
+        $registreQuery = "INSERT INTO users(first_name, last_name, email, role, password) VALUES(?,?,?,?,?)";
+        $statement = $conn->prepare($registreQuery);
+
+        if($statement->execute([$firstname, $lastname, $email, 'reader', $passwordHashed])) {
+            echo '<div class="bg-green-600 fixed top-[15%] left-[50%] border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+                    Inscription réussie !
+                  </div>';
+
+            $_SESSION['user'] = [
+                'first_name' => $firstname,
+                'last_name' => $lastname,
+                'email' => $email,
+                'role' => 'reader'
+            ];
             header("Location: /home");
             exit;
+            
         }
     }
-
-    /*if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login']))
+    public static function logout()
     {
-        $email = $_POST['email'] ?? null;
-        $password = $_POST['password'] ?? null;
+        session_destroy();
+        header("Location: /");
+        exit;
+    }
+}
 
-        if(AuthentificationController::login($email,$password))
-        {
-            header("Location: /display");
-            exit;
-        }
-    }*/
-
-?>
+if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if(isset($_POST['signup'])) {
+        AuthentificationController::signup();
+    } elseif(isset($_POST['login'])) {
+        AuthentificationController::login();
+    }
+}
+if(isset($_POST['logout'])) {
+    AuthentificationController::logout();
+}
