@@ -9,7 +9,7 @@ USE PDOException;
 class Data
 {
     private static $instance = null;
-    private $servername = 'my_mysql';
+    private $servername = 'my_mysql_new';
     private $serverpass = '123456';
     private $serverusername = 'root';
     private $port = '3306';

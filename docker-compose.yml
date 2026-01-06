@@ -1,11 +1,11 @@
 services:
   db:
     image: mysql:8.0
-    container_name: my_mysql
+    container_name: my_mysql_new
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: "123456"
-      MYSQL_DATABASE: "my_read_up"   # création automatique de la base
+      MYSQL_DATABASE: "my_read_up" 
       MYSQL_SSL_MODE: DISABLED
     ports:
       - "3308:3306"

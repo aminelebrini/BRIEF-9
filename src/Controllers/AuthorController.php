@@ -19,7 +19,12 @@ namespace Controllers;
                 'title' => "Espace Auteur",
                 'Commentaires' => $Commentaires
             ]);
-        }    
+        }
+        
+        public static function addArticle()
+        {
+            
+        }
     }
 
 ?>

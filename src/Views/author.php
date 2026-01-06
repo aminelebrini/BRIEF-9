@@ -1,5 +1,6 @@
 <?php 
-
+    use Controllers\AuthentificationController;
+    use Controllers\AuthorController;
 ?>
 
 <!DOCTYPE html>
@@ -46,13 +47,14 @@
                 Nouvel Article
             </a>
         </nav>
-
         <div class="p-6">
             <div class="glass p-4 rounded-2xl flex items-center gap-3 bg-white/[0.02]">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=<?= $_SESSION['user']['first_name'] ?>" class="w-10 h-10 rounded-lg bg-purple-500/20">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=<?= $_SESSION['user']['first_name'] ?>" class="w-10 h-10 rounded-lg bg-indigo-500/20">
                 <div class="overflow-hidden">
-                    <p class="text-xs font-bold truncate"><?= $_SESSION['user']['first_name'] ?></p>
-                    <span class="text-[9px] text-purple-400 font-bold uppercase tracking-tighter">Auteur certifié</span>
+                    <p class="text-xs font-bold truncate"><?= $_SESSION['user']['first_name'] . " " . $_SESSION['user']['last_name']?></p>
+                    <form action="/logout" method="POST">
+                        <button type="submit" name="logout" class="text-[10px] text-red-400 font-bold uppercase hover:underline">Déconnexion</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -67,7 +69,7 @@
             </div>
             <div class="flex gap-4">
                 <a href="/feed" class="glass px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-white/10 transition-all uppercase tracking-widest border border-white/5">Lire le feed</a>
-                <button class="bg-purple-600 px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-purple-500 transition-all uppercase tracking-widest shadow-lg shadow-purple-900/40">Écrire</button>
+                <a id="ecriver" class="bg-purple-600 px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-purple-500 transition-all uppercase tracking-widest shadow-lg shadow-purple-900/40">Écrire</a>
             </div>
         </div>
 
@@ -120,6 +122,67 @@
             </div>
         </div>
     </main>
+    <div id="modalEcri" class="fromecri glass p-10 shadow-2xl shadow-purple-900/40 hidden border border-white/10 rounded-[3rem] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-[95%] max-w-4xl max-h-[90vh] overflow-y-auto">
+    
+    <div class="flex justify-end mb-2">
+        <button id="closeBtn" class="text-slate-500 hover:text-white transition-colors p-2">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+    </div>
 
+    <div class="max-w-4xl mx-auto">
+        <div class="mb-10">
+            <h2 class="text-3xl font-black text-white">Nouvelle <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">Publication</span></h2>
+            <p class="text-slate-500 text-sm">Partagez vos idées avec la communauté ReadUp.</p>
+        </div>
+
+        <form id="articleForm" action="/author/publish" method="POST" enctype="multipart/form-data" class="space-y-8">
+            
+            <div class="grid grid-cols-1 gap-6">
+                <div class="glass p-8 rounded-[2rem] focus-within:border-purple-500/50 transition-all">
+                    <label class="text-[10px] uppercase font-black text-purple-400 tracking-[0.2em] mb-4 block">Titre de l'oeuvre</label>
+                    <input type="text" name="title" required 
+                        placeholder="Entrez un titre percutant..." 
+                        class="w-full bg-transparent border-none text-2xl font-bold text-white placeholder:text-white focus:outline-none">
+                </div>
+
+                <div class="glass p-8 rounded-[2rem] focus-within:border-purple-500/50 transition-all">
+                    <label class="text-[10px] uppercase font-black text-purple-400 tracking-[0.2em] mb-4 block">Corps de l'article</label>
+                    <textarea name="content" required rows="10" 
+                        placeholder="Il était une fois..." 
+                        class="w-full bg-transparent border-none text-slate-300 leading-relaxed placeholder:text-white focus:outline-none resize-none"></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-center pt-4">
+                <button type="submit" class="bg-gradient-to-r from-purple-600 to-pink-600 px-12 py-4 rounded-2xl text-xs font-black text-white hover:scale-105 transition-all uppercase tracking-widest shadow-lg shadow-purple-900/40">
+                    Publier l'article
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45] hidden"></div>
+    <script>
+    const CloseBtn = document.getElementById('closeBtn');
+    const FormEcri  = document.querySelector('.fromecri');
+    const EciBtn = document.getElementById('ecriver');
+
+    if(EciBtn) {
+        EciBtn.onclick = function() {
+            FormEcri.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        };
+    }
+
+    if(CloseBtn) {
+        CloseBtn.onclick = function() {
+            FormEcri.classList.add('hidden');
+            document.body.style.overflow = 'auto'; 
+        };
+    }
+    
+    </script>
 </body>
 </html>

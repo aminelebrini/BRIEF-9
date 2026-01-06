@@ -35,6 +35,7 @@ class AuthentificationController {
 
             if($user['role'] === 'author')
             {
+                $_SESSION['author'] = $user;
                 header("Location: /author");
                 exit;
             }
