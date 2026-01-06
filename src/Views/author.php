@@ -61,67 +61,79 @@
     </aside>
 
     <main class="flex-1 ml-72 p-12 relative z-10">
-        
+    
         <div class="flex justify-between items-center mb-12">
             <div>
-                <h2 class="text-4xl font-black">Bonjour, <?= $_SESSION['user']['first_name'] ?> 👋</h2>
+                <h2 class="text-4xl font-black">Bonjour, <?= htmlspecialchars($_SESSION['user']['first_name'] . " " . $_SESSION['user']['last_name']) ?> 👋</h2>
                 <p class="text-slate-500 text-sm mt-2 font-medium italic">Prêt à inspirer vos lecteurs aujourd'hui ?</p>
             </div>
             <div class="flex gap-4">
-                <a href="/feed" class="glass px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-white/10 transition-all uppercase tracking-widest border border-white/5">Lire le feed</a>
-                <a id="ecriver" class="bg-purple-600 px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-purple-500 transition-all uppercase tracking-widest shadow-lg shadow-purple-900/40">Écrire</a>
+                <button id="ecriver" class="bg-purple-600 px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-purple-500 transition-all uppercase tracking-widest shadow-lg shadow-purple-900/40">Écrire</button>
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             <div class="glass p-8 rounded-[2rem] border-l-4 border-purple-500">
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Articles publiés</p>
-                <h3 class="text-4xl font-black mt-2">14</h3>
+                <h3 class="text-4xl font-black mt-2"><?= count($AllArticle) ?></h3>
             </div>
             <div class="glass p-8 rounded-[2rem] border-l-4 border-blue-500">
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Lectures totales</p>
-                <h3 class="text-4xl font-black mt-2">3.8k</h3>
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Likes totales</p>
+                <h3 class="text-4xl font-black mt-2">22</h3>
             </div>
             <div class="glass p-8 rounded-[2rem] border-l-4 border-pink-500">
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Commentaires reçus</p>
-                <h3 class="text-4xl font-black mt-2">127</h3>
+                <h3 class="text-4xl font-black mt-2"><?= count($Commentaires) ?></h3>
             </div>
         </div>
 
-        <div class="grid lg:grid-cols-12 gap-10">
+     <div class="grid lg:grid-cols-12 gap-10 items-start">
+        
             <div class="lg:col-span-8">
                 <h3 class="text-xl font-bold mb-6 flex items-center gap-3">
                     <span class="w-1.5 h-6 bg-purple-500 rounded-full"></span>
-                    Publications récentes
+                    Mes Publications
                 </h3>
-                
-                <div class="space-y-4">
-                    <div class="glass p-6 rounded-[2rem] group hover:bg-white/[0.04] transition-all border border-white/5">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <span class="text-[10px] text-purple-400 font-bold uppercase tracking-widest">Technologie</span>
-                                <h4 class="text-lg font-bold mt-1">L'IA dans le développement moderne</h4>
-                                <p class="text-slate-500 text-xs mt-1">Publié le 02 Janvier 2026 • 5 min de lecture</p>
-                            </div>
-                            <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                                <button class="p-3 rounded-xl bg-white/5 text-slate-400 hover:text-white">Modifier</button>
-                                <button class="p-3 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20">Suppr.</button>
+            
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <?php foreach($AllArticle as $article): ?>
+                        <?php if ($article['author_id'] == $_SESSION['user']['id']): ?>
+                        <div class="glass group p-6 rounded-[2.5rem] border border-white/5 hover:border-purple-500/30 hover:bg-white/[0.04] transition-all duration-500 flex flex-col justify-between h-auto">
+                         <div class="flex-1 overflow-hidden">
+                                <h3 class="text-[30px] font-bold text-white leading-tight group-hover:text-purple-300 transition-colors">
+                                    <?= htmlspecialchars($article['titre']) ?>
+                                </h3>
+                                <p class="text-slate-400 text-[25px] mt-3 line-clamp-3 font-light leading-relaxed">
+                                    <?= strip_tags($article['contenu']) ?>
+                                </p>
+                                <p class="text-slate-400 text-[15px] mt-3 line-clamp-3 font-light leading-relaxed">
+                                    <?= strip_tags($article['date_publication']) ?>
+                                </p>
                             </div>
                         </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+         <div class="lg:col-span-4 sticky top-12">
+             <div class="glass p-8 rounded-[2.5rem] bg-gradient-to-br from-purple-600/10 to-transparent border border-purple-500/20">
+                    <h3 class="font-bold mb-4 flex items-center gap-2">
+                        <span class="text-xl">💡</span> Astuce d'écriture
+                    </h3>
+                    <p class="text-sm text-slate-400 leading-relaxed italic">
+                        "Les articles avec une image de couverture percutante reçoivent en moyenne 40% de clics en plus. Pensez à soigner vos visuels !"
+                    </p>
+                    <div class="mt-6 pt-6 border-t border-white/10">
+                        <p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Le saviez-vous ?</p>
+                        <p class="text-xs text-slate-400 mt-2">La régularité est la clé pour fidéliser votre audience sur ReadUp.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-4">
-                <div class="glass p-8 rounded-[2.5rem] bg-gradient-to-br from-purple-600/10 to-transparent">
-                    <h3 class="font-bold mb-4">Astuce d'écriture 💡</h3>
-                    <p class="text-sm text-slate-400 leading-relaxed">
-                        Les articles avec une image de couverture percutante reçoivent en moyenne 40% de clics en plus. Pensez à soigner vos visuels !
-                    </p>
-                </div>
-            </div>
         </div>
     </main>
+    
     <div id="modalEcri" class="fromecri glass p-10 shadow-2xl shadow-purple-900/40 hidden border border-white/10 rounded-[3rem] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-[95%] max-w-4xl max-h-[90vh] overflow-y-auto">
     
     <div class="flex justify-end mb-2">
@@ -136,7 +148,7 @@
             <p class="text-slate-500 text-sm">Partagez vos idées avec la communauté ReadUp.</p>
         </div>
 
-        <form id="articleForm" action="/author/publish" method="POST" enctype="multipart/form-data" class="space-y-8">
+        <form id="articleForm" method="POST" action="/addArticle" class="space-y-8">
             
             <div class="grid grid-cols-1 gap-6">
                 <div class="glass p-8 rounded-[2rem] focus-within:border-purple-500/50 transition-all">
@@ -155,15 +167,56 @@
             </div>
 
             <div class="flex justify-center pt-4">
-                <button type="submit" class="bg-gradient-to-r from-purple-600 to-pink-600 px-12 py-4 rounded-2xl text-xs font-black text-white hover:scale-105 transition-all uppercase tracking-widest shadow-lg shadow-purple-900/40">
+                <button type="submit" name="pub" value="<?= $_SESSION['user']['id'] ?>" class="bg-gradient-to-r from-purple-600 to-pink-600 px-12 py-4 rounded-2xl text-xs font-black text-white hover:scale-105 transition-all uppercase tracking-widest shadow-lg shadow-purple-900/40">
                     Publier l'article
                 </button>
             </div>
         </form>
     </div>
-</div>
+    
+    <!--2 modifier-->
 
-<div id="overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45] hidden"></div>
+    <div id="modalEcri" class="fromecri glass p-10 shadow-2xl shadow-purple-900/40 hidden border border-white/10 rounded-[3rem] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-[95%] max-w-4xl max-h-[90vh] overflow-y-auto">
+    
+    <div class="flex justify-end mb-2">
+        <button id="closeBtn" class="text-slate-500 hover:text-white transition-colors p-2">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+            <div class="mb-10">
+                <h2 class="text-3xl font-black text-white">Nouvelle <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">Publication</span></h2>
+                <p class="text-slate-500 text-sm">Partagez vos idées avec la communauté ReadUp.</p>
+            </div>
+
+            <form id="articleForm" method="POST" action="/addArticle" class="space-y-8">
+            
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="glass p-8 rounded-[2rem] focus-within:border-purple-500/50 transition-all">
+                        <label class="text-[10px] uppercase font-black text-purple-400 tracking-[0.2em] mb-4 block">Titre de l'oeuvre</label>
+                        <input type="text" name="title" required 
+                            placeholder="Entrez un titre percutant..." 
+                            class="w-full bg-transparent border-none text-2xl font-bold text-white placeholder:text-white focus:outline-none">
+                    </div>
+
+                    <div class="glass p-8 rounded-[2rem] focus-within:border-purple-500/50 transition-all">
+                        <label class="text-[10px] uppercase font-black text-purple-400 tracking-[0.2em] mb-4 block">Corps de l'article</label>
+                        <textarea name="content" required rows="10" 
+                            placeholder="Il était une fois..." 
+                            class="w-full bg-transparent border-none text-slate-300 leading-relaxed placeholder:text-white focus:outline-none resize-none"></textarea>
+                    </div>
+                </div>
+
+                <div class="flex justify-center pt-4">
+                    <button type="submit" name="modif" value="<?= $_SESSION['article']['id'] ?>" class="bg-gradient-to-r from-purple-600 to-pink-600 px-12 py-4 rounded-2xl text-xs font-black text-white hover:scale-105 transition-all uppercase tracking-widest shadow-lg shadow-purple-900/40">
+                        MOdifier l'article
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45] hidden"></div>
     <script>
     const CloseBtn = document.getElementById('closeBtn');
     const FormEcri  = document.querySelector('.fromecri');

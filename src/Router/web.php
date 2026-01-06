@@ -13,6 +13,8 @@ $router->post("/signup", "Controllers\\AuthentificationController@signup");
 $router->post('/logout', "Controllers\\AuthentificationController@logout");
 $router->post("/add_category", "Controllers\\AdminController@add_category");
 $router->post("/remove_category", "Controllers\\AdminController@remove_category");
+$router->post("/addArticle", "Controllers\\AuthorController@addArticle");
+
 
 $router->generate_path();
 ?>;
