@@ -2,30 +2,43 @@
 
 namespace data;
 
+USE PDO;
+
+USE PDOException;
+
 class Data
 {
-    private $servername = 'my_mysql';
+    private static $instance = null;
+    private $servername = 'my_mysql_new';
     private $serverpass = '123456';
     private $serverusername = 'root';
     private $port = '3306';
     private $db = 'my_read_up';
-    private $conn;
+    private static $conn;
 
-    public function connection()
+    private function __construct()
     {
-        $this->conn = null;
-
         try{
-        $this->conn = new \PDO("mysql:host=$this->servername;port=$this->port;dbname=$this->db;charset=utf8", $this->serverusername, $this->serverpass);
+            self::$conn = new PDO("mysql:host={$this->servername};port={$this->port};dbname={$this->db};charset=utf8", $this->serverusername, $this->serverpass);
+            self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $this->conn->setAttribute(\PDO::ATTR_ERRMODE,\PDO::ERRMODE_EXCEPTION);
-
-        }catch(\PDOException $e){
+        }catch(PDOException $e){
     
             echo $e->getMessage();
         }
+    }
 
-        return $this->conn;
+    public static function getInstance()
+    {
+        if(self::$instance === null)
+        {
+            self::$instance = new Data();
+        }
+        return self::$instance;
+    }
+    public function connection()
+    {
+        return self::$conn;
     }
 
 }
