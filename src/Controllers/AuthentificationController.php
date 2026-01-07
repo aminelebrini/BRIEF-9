@@ -1,9 +1,18 @@
 <?php
 namespace Controllers;
 
+use Core\Controller;
 use data\Data;
 
-class AuthentificationController {
+class AuthentificationController extends Controller{
+
+    public function index()
+    {
+        $this->render('home',
+            [
+                'title' =>'home'
+            ]); 
+    }
 
     public static function login()
     {
@@ -59,13 +68,6 @@ class AuthentificationController {
         $statement = $conn->prepare($existQuery);
         $statement->execute([$email]);
 
-        if ($statement->fetch()) {
-            echo '<div class="bg-red-100 fixed top-[15%] left-[50%] border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
-                    Cet email est déjà utilisé.
-                  </div>';
-            return false; 
-        }
-
         $passwordHashed = password_hash($password, PASSWORD_BCRYPT);
         $registreQuery = "INSERT INTO users(first_name, last_name, email, role, password) VALUES(?,?,?,?,?)";
         $statement = $conn->prepare($registreQuery);
@@ -96,6 +98,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         AuthentificationController::signup();
         header("Location: /home");
         exit;
+        
     } elseif(isset($_POST['login'])) {
         AuthentificationController::login();
     }

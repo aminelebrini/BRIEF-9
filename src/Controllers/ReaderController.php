@@ -9,15 +9,10 @@
     {
         public function index()
         {
-            $conn = Data::getInstance()->connection();
-            $queryLike = "SELECT * FROM article_likes";
-            $statement = $conn->prepare($queryLike);
-            $statement->execute();
-            $Likes = $statement->fetchAll(\PDO::FETCH_ASSOC) ?? [];
+            
             $this->render("display",
                 [
                     'title' => "reader",
-                    'Likes' => $Likes
                 ]
                 );
         }

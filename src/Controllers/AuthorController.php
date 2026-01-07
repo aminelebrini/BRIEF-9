@@ -21,10 +21,16 @@ namespace Controllers;
             $statement->execute();
             $AllArticle = $statement->fetchAll(\PDO::FETCH_ASSOC) ?? [];
 
+            $queryLike = "SELECT * FROM article_likes";
+            $statement = $conn->prepare($queryLike);
+            $statement->execute();
+            $Likes = $statement->fetchAll(\PDO::FETCH_ASSOC) ?? [];
+
             $this->render('author', [
                 'title' => "Espace Auteur",
                 'Commentaires' => $Commentaires,
-                'AllArticle' => $AllArticle
+                'AllArticle' => $AllArticle,
+                'Likes' => $Likes
             ]);
         }
         

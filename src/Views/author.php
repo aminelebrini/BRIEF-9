@@ -1,6 +1,8 @@
 <?php 
     use Controllers\AuthentificationController;
     use Controllers\AuthorController;
+    use Controllers\DisplayController;
+
 ?>
 
 <!DOCTYPE html>
@@ -88,15 +90,36 @@
                 <button id="ecriver" class="bg-purple-600 px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-purple-500 transition-all uppercase tracking-widest shadow-lg shadow-purple-900/40">Écrire</button>
             </div>
         </div>
-
+        <?php 
+            $articleCount = 0;
+            $likeCount = 0;
+            $commentaireCount = 0;
+            foreach($AllArticle as $article){
+                if ($article['author_id'] == $_SESSION['user']['id']){
+                    $articleCount++;
+                }
+            }
+            
+            foreach($Likes as $likes)
+            {
+                foreach($AllArticle as $article){
+                    if($likes['article_id'] === $article['id'] && $article['author_id'] === $_SESSION['user']['id'])
+                    {
+                        $likeCount++;
+                    }
+                }
+            }
+            
+            
+            ?>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             <div class="glass p-8 rounded-[2rem] border-l-4 border-purple-500">
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Articles publiés</p>
-                <h3 class="text-4xl font-black mt-2"><?= count($AllArticle) ?></h3>
+                <h3 class="text-4xl font-black mt-2"><?= $articleCount ?></h3>
             </div>
             <div class="glass p-8 rounded-[2rem] border-l-4 border-blue-500">
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Likes totales</p>
-                <h3 class="text-4xl font-black mt-2">22</h3>
+                <h3 class="text-4xl font-black mt-2"><?= $likeCount ?></h3>
             </div>
             <div class="glass p-8 rounded-[2rem] border-l-4 border-pink-500">
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Commentaires reçus</p>

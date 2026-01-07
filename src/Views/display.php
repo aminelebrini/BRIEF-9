@@ -3,9 +3,9 @@
     use Controllers\AuthentificationController;
     use Controllers\AuthorController;
     use Controllers\ReaderController;
+    use Controllers\DisplayController;
 
     $User = $_SESSION['user'];
-    $AllArtilce = $_SESSION['AllArticle'];
 ?>
 
 <!DOCTYPE html>
@@ -43,11 +43,17 @@
                     <h3 class="text-xl font-bold"><?= $User['first_name'] . " " . $User['last_name']?></h3>
                     <p class="text-slate-400 text-sm italic">Lecteur Passionné</p>
                 </div>
-
+                
                 <div class="space-y-3">
                     <div class="flex justify-between text-sm p-3 bg-white/5 rounded-xl">
                         <span class="text-slate-400">livres aimés</span>
-                        <span class="font-bold"><?= count($Likes) ?></span>
+                        <?php $userLikesCount = 0;
+                        foreach($Likes as $like): ?>
+                            <?php if($like['user_id'] === $User['id']): 
+                                $userLikesCount++;?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                            <span class="font-bold"><?= $userLikesCount; ?></span>
                     </div>
                 </div>
 
@@ -64,7 +70,8 @@
         </aside>
 
         <main class="lg:w-2/4 space-y-8 pb-20">
-        <?php foreach($AllArtilce as $article):?>
+        <?php foreach($AllArticle as $article):?>
+            
             <article class="glass rounded-3xl overflow-hidden border border-white/10 mb-8 max-w-2xl mx-auto transition-all hover:bg-white/[0.02]">
     
                 <div class="p-5 flex items-center justify-between">

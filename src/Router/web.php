@@ -7,7 +7,6 @@ $router->get("/display", "Controllers\\DisplayController@index");
 $router->get("/admindash", "Controllers\\AdminController@index");
 $router->get("/admindash", "Controllers\\AdminController@index");
 $router->get("/author", "Controllers\\AuthorController@index");
-$router->get("/display", "Controllers\\ReaderController@index");
 
 $router->post("/login", "Controllers\\AuthentificationController@login");
 $router->post("/signup", "Controllers\\AuthentificationController@signup");
