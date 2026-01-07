@@ -2,6 +2,7 @@
 
     use Controllers\AuthentificationController;
     use Controllers\AuthorController;
+    use Controllers\ReaderController;
 
     $User = $_SESSION['user'];
     $AllArtilce = $_SESSION['AllArticle'];
@@ -46,18 +47,24 @@
                 <div class="space-y-3">
                     <div class="flex justify-between text-sm p-3 bg-white/5 rounded-xl">
                         <span class="text-slate-400">livres aimés</span>
-                        <span class="font-bold">128</span>
+                        <span class="font-bold"><?= count($Likes) ?></span>
                     </div>
                 </div>
 
                 <button class="w-full mt-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-sm font-bold hover:opacity-90 transition-all">
                     Éditer le profil
                 </button>
+                <form action="/logout" method="POST" class="mt-3">
+                    <button type="submit" name="logout" class="w-full py-3 rounded-xl glass border border-red-500/20 text-red-400 text-[10px] font-bold uppercase tracking-widest hover:bg-red-500/10 hover:border-red-500/50 transition-all duration-300 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            Déconnexion
+                    </button>
+                </form>
             </div>
         </aside>
 
         <main class="lg:w-2/4 space-y-8 pb-20">
-           <?php foreach($AllArtilce as $article):?>
+        <?php foreach($AllArtilce as $article):?>
             <article class="glass rounded-3xl overflow-hidden border border-white/10 mb-8 max-w-2xl mx-auto transition-all hover:bg-white/[0.02]">
     
                 <div class="p-5 flex items-center justify-between">
@@ -75,9 +82,6 @@
                             <p class="text-[11px] text-slate-500 font-medium italic"><?= $article['date_publication'] ?></p>
                         </div>
                     </div>
-                    <button class="text-slate-500 hover:text-white transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
-                    </button>
                 </div>
 
                 <div class="px-5 pb-4">
@@ -91,8 +95,18 @@
                         <div class="flex gap-6">
                             <div class="flex gap-6">
                                 <div class="flex items-center gap-2">
-                                    <button class="flex items-center text-slate-400 hover:text-indigo-400 transition-all group"><i class="fa-regular fa-heart text-lg"></i></button>
-                                    <span class="text-xs font-bold uppercase tracking-widest text-slate-400">128</span>
+                                    <form method="POST" action="/liker_article">
+                                        <input type="hidden" name="user_id" value="<?= $User['id'] ?>">
+                                        <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
+                                        <button name="like" type="submit" id="like" class="flex items-center text-slate-400 hover:text-indigo-400 transition-all group"><i class="fa-regular fa-heart text-lg"></i></button>
+                                    </form>
+                                    <?php $likesCount = 0;?>
+                                    <?php foreach($Likes as $like): ?>
+                                        <?php if($article['id'] === $like['article_id']){ 
+                                            $likesCount++;?>
+                                        <?php } ?>
+                                    <?php endforeach; ?>
+                                        <span class="text-xs font-bold uppercase tracking-widest text-slate-400"><?= $likesCount; ?></span>
                                 </div>
                             </div>
                         </div>
@@ -119,6 +133,5 @@
         </aside>
 
     </div>
-
 </body>
 </html>

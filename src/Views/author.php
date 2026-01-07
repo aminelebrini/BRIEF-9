@@ -14,7 +14,7 @@
     <style>
         body { font-family: 'Outfit', sans-serif; background: #0b0f1a; color: white; margin: 0; overflow-x: hidden; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .sidebar-item-active { background: linear-gradient(to right, rgba(139, 92, 246, 0.2), transparent); border-left: 4px solid #8b5cf6; }
+        /*.sidebar-item-active { background: linear-gradient(to right, rgba(139, 92, 246, 0.2), transparent); border-left: 4px solid #8b5cf6; }*/
         .blob { filter: blur(80px); position: fixed; z-index: 0; pointer-events: none; }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
