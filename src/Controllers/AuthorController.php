@@ -39,14 +39,14 @@ namespace Controllers;
             $statement = $conn->prepare($queryAddArticle);
             $statement->execute([$authorId, $articleTitle, $articleContent]);
         }
-        // public static function showAllArticle()
-        // {
-        //     $conn = Data::getInstance()->connection();
-            
-        // }
         public static function modifierArticle()
         {
-            $conn = Data::getInstance()->connection();
+            // $conn = Data::getInstance()->connection();
+            // $queryAllArticle = "SELECT * FROM articles";
+            // $statement = $conn->prepare($queryAllArticle);
+            // $statement->execute();
+            // $AllArticle = $statement->fetchAll(\PDO::FETCH_ASSOC) ?? [];
+            // $_SESSION['AllArticle'] = $AllArticle;
 
         }
         

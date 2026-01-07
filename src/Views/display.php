@@ -1,8 +1,10 @@
 <?php
 
     use Controllers\AuthentificationController;
+    use Controllers\AuthorController;
 
     $User = $_SESSION['user'];
+    $AllArtilce = $_SESSION['AllArticle'];
 ?>
 
 <!DOCTYPE html>
@@ -12,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <title>ReadUp | Feed</title>
     <style>
         body { font-family: 'Outfit', sans-serif; background: #0b0f1a; color: white; }
@@ -54,60 +57,52 @@
         </aside>
 
         <main class="lg:w-2/4 space-y-8 pb-20">
-            <div class="glass p-2 rounded-2xl flex items-center">
-                <input type="text" placeholder="Rechercher une pépite..." class="w-full bg-transparent px-4 py-2 outline-none text-sm">
-                <button class="bg-white/10 p-2 rounded-xl hover:bg-white/20 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
-            </div>
-
-            <article class="glass rounded-[2.5rem] overflow-hidden group hover:border-indigo-500/50 transition-all duration-500">
-                <div class="h-64 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=1000" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Cover">
-                </div>
-                <div class="p-8">
-                    <div class="flex gap-2 mb-4 text-[10px] uppercase tracking-widest font-bold">
-                        <span class="px-3 py-1 bg-indigo-500/20 text-indigo-400 rounded-full">Littérature</span>
-                        <span class="px-3 py-1 bg-slate-500/20 text-slate-400 rounded-full">5 min de lecture</span>
-                    </div>
-                    <h2 class="text-2xl font-bold mb-3 group-hover:text-indigo-400 transition-colors">L'art de la narration moderne</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Pourquoi certains récits nous marquent-ils plus que d'autres ? Exploration des structures narratives qui captivent l'esprit...
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-orange-400 to-red-500"></div>
-                            <span class="text-xs font-semibold">Jean-Paul S.</span>
+           <?php foreach($AllArtilce as $article):?>
+            <article class="glass rounded-3xl overflow-hidden border border-white/10 mb-8 max-w-2xl mx-auto transition-all hover:bg-white/[0.02]">
+    
+                <div class="p-5 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 p-0.5">
+                            <div class="w-full h-full rounded-full bg-[#0b0f1a] flex items-center justify-center overflow-hidden">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtuphMb4mq-EcVWhMVT8FCkv5dqZGgvn_QiA&s" alt="Avatar">
+                            </div>
                         </div>
-                        <a href="#" class="text-sm font-bold border-b border-indigo-500 pb-1 hover:text-indigo-400 transition-all">Lire la suite</a>
+                        <div>
+                            <h3 class="text-sm font-bold text-white flex items-center gap-1">
+                                <?= $article['first_name'] . " " . $article['last_name'] ?>
+                                <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293l-4 4a1 1 0 01-1.414 0l-2-2a1 1 0 111.414-1.414L9 10.586l3.293-3.293a1 1 0 111.414 1.414z"></path></svg>
+                            </h3>
+                            <p class="text-[11px] text-slate-500 font-medium italic"><?= $article['date_publication'] ?></p>
+                        </div>
+                    </div>
+                    <button class="text-slate-500 hover:text-white transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
+                    </button>
+                </div>
+
+                <div class="px-5 pb-4">
+                    <h2 class="text-xl font-bold mb-2 text-indigo-400"><?= $article['titre'] ?></h2>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        <?= $article['contenu'] ?>
+                    </p>
+                </div>
+                <div class="px-5 py-3 border-t border-white/5 bg-white/[0.01]">
+                    <div class="flex items-center justify-between">
+                        <div class="flex gap-6">
+                            <div class="flex gap-6">
+                                <div class="flex items-center gap-2">
+                                    <button class="flex items-center text-slate-400 hover:text-indigo-400 transition-all group"><i class="fa-regular fa-heart text-lg"></i></button>
+                                    <span class="text-xs font-bold uppercase tracking-widest text-slate-400">128</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </article>
-
-            <article class="glass rounded-[2.5rem] overflow-hidden group hover:border-purple-500/50 transition-all duration-500">
-                <div class="p-8">
-                    <div class="flex gap-2 mb-4 text-[10px] uppercase tracking-widest font-bold">
-                        <span class="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full">Philosophie</span>
-                    </div>
-                    <h2 class="text-2xl font-bold mb-3 group-hover:text-purple-400 transition-colors">Le silence dans le tumulte digital</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Retrouver le goût de la concentration profonde dans un monde saturé de notifications...
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-400 to-indigo-500"></div>
-                            <span class="text-xs font-semibold">Marie Curie</span>
-                        </div>
-                        <a href="#" class="text-sm font-bold border-b border-purple-500 pb-1 hover:text-purple-400 transition-all">Lire la suite</a>
-                    </div>
-                </div>
-            </article>
+            <?php endforeach; ?>
         </main>
 
-        <aside class="hidden lg:block lg:w-1/4 space-y-6">
+        <aside class="hidden lg:block lg:w-1/4 space-y-6 lg:top-24">
             <div class="glass p-6 rounded-[2rem]">
                 <h4 class="text-sm font-bold uppercase tracking-widest mb-4">Tendances</h4>
                 <ul class="space-y-4">
