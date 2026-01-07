@@ -18,6 +18,28 @@
         .blob { filter: blur(80px); position: fixed; z-index: 0; pointer-events: none; }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .article-card {
+            animation: fadeInUp 0.4s ease-out forwards;
+            cursor: pointer;
+        }
+
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-card:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.15);
+        }
     </style>
 </head>
 <body class="flex min-h-screen bg-[#0b0f1a]">
@@ -32,19 +54,14 @@
         <nav class="flex-1 px-4 space-y-2">
             <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold mb-4 px-4">Ma Plume</div>
             
-            <a href="/authordash" class="sidebar-item-active flex items-center gap-4 px-4 py-4 rounded-xl text-purple-400 font-bold transition-all">
+            <a id="ensemble" class="sidebar-item-active flex items-center gap-4 px-4 py-4 rounded-xl text-purple-400 font-bold transition-all">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                 Vue d'ensemble
             </a>
 
-            <a href="/author/my-articles" class="flex items-center gap-4 px-4 py-4 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-all">
+            <a id="articlelist" class="flex items-center gap-4 px-4 py-4 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-all">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                 Mes Articles
-            </a>
-
-            <a href="/author/write" class="flex items-center gap-4 px-4 py-4 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                Nouvel Article
             </a>
         </nav>
         <div class="p-6">
@@ -60,7 +77,7 @@
         </div>
     </aside>
 
-    <main class="flex-1 ml-72 p-12 relative z-10">
+    <main class="display1 flex-1 ml-72 p-12 relative z-10">
     
         <div class="flex justify-between items-center mb-12">
             <div>
@@ -133,7 +150,34 @@
 
         </div>
     </main>
-    
+    <main class="Display2 hidden flex-1 ml-72 p-12 relative z-10">
+    <div class="max-w-5xl mx-auto">
+        <h3 class="text-xl font-bold mb-8 flex items-center gap-3">
+            <span class="w-1.5 h-6 bg-purple-500 rounded-full"></span>
+            Flux des Articles
+        </h3>
+
+        <div class="space-y-4">
+            <?php foreach($AllArticle as $article): ?>
+            <article class="article-card glass group p-6 rounded-[2rem] border border-white/5 flex items-center gap-6 hover:bg-white/[0.04] transition-all duration-300">
+                <div class="hidden md:flex flex-col items-center justify-center border-r border-white/10 pr-6 min-w-[80px]">
+                    <span class="text-2xl font-black text-white"><?= $article['id'] ?></span>
+                </div>
+
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="text-[10px] px-2 py-0.5 rounded bg-purple-500/20 text-purple-400 font-bold uppercase tracking-widest">Technologie</span>
+                    </div>
+                    <h3 class="text-[30px] font-bold text-white leading-tight group-hover:text-purple-300 transition-colors">
+                        <?= htmlspecialchars($article['titre']) ?>
+                    </h3>                    
+                    <p class="text-sm text-slate-400 mt-1 line-clamp-1"><?= $article['contenu'] ?></p>
+                </div>
+            </article>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</main>
     <div id="modalEcri" class="fromecri glass p-10 shadow-2xl shadow-purple-900/40 hidden border border-white/10 rounded-[3rem] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-[95%] max-w-4xl max-h-[90vh] overflow-y-auto">
     
     <div class="flex justify-end mb-2">
@@ -218,24 +262,42 @@
     </div>
     <div id="overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45] hidden"></div>
     <script>
-    const CloseBtn = document.getElementById('closeBtn');
-    const FormEcri  = document.querySelector('.fromecri');
-    const EciBtn = document.getElementById('ecriver');
+const CloseBtn = document.getElementById('closeBtn');
+const FormEcri  = document.querySelector('.fromecri');
+const EciBtn = document.getElementById('ecriver');
+const ArticleBtn = document.getElementById('articlelist');
+const EnsembleBtn = document.getElementById('ensemble');
+const Display1 = document.querySelector('.display1');
+const Display2 = document.querySelector('.Display2');
 
-    if(EciBtn) {
-        EciBtn.onclick = function() {
-            FormEcri.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        };
-    }
+if (EciBtn) {
+    EciBtn.addEventListener('click', ()=>{
+        FormEcri.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    });
+}
 
-    if(CloseBtn) {
-        CloseBtn.onclick = function() {
-            FormEcri.classList.add('hidden');
-            document.body.style.overflow = 'auto'; 
-        };
-    }
-    
-    </script>
+if (CloseBtn) {
+    CloseBtn.addEventListener('click', ()=>{
+        FormEcri.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    });
+}
+
+if (ArticleBtn) {
+    ArticleBtn.addEventListener('click', ()=>{
+        Display1.classList.add('hidden');
+        Display2.classList.remove('hidden');
+    });
+}
+if(EnsembleBtn)
+{
+    EnsembleBtn.addEventListener('click', ()=>{
+        Display1.classList.remove('hidden');
+        Display2.classList.add('hidden');
+    });
+}
+</script>
+
 </body>
 </html>
