@@ -81,9 +81,6 @@ class AuthentificationController {
                 'email' => $email,
                 'role' => 'reader'
             ];
-            header("Location: /home");
-            exit;
-            
         }
     }
     public static function logout()
@@ -97,6 +94,8 @@ class AuthentificationController {
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(isset($_POST['signup'])) {
         AuthentificationController::signup();
+        header("Location: /home");
+        exit;
     } elseif(isset($_POST['login'])) {
         AuthentificationController::login();
     }
