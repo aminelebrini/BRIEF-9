@@ -182,6 +182,7 @@
 
         <div class="space-y-4">
             <?php foreach($AllArticle as $article): ?>
+            <?php if ($article['author_id'] == $_SESSION['user']['id']): ?>
             <article class="article-card glass group p-6 rounded-[2rem] border border-white/5 flex items-center gap-6 hover:bg-white/[0.04] transition-all duration-300">
                 <div class="hidden md:flex flex-col items-center justify-center border-r border-white/10 pr-6 min-w-[80px]">
                     <span class="text-2xl font-black text-white"><?= $article['id'] ?></span>
@@ -197,6 +198,7 @@
                     <p class="text-sm text-slate-400 mt-1 line-clamp-1"><?= $article['contenu'] ?></p>
                 </div>
             </article>
+            <?php endif; ?>
             <?php endforeach; ?>
         </div>
     </div>

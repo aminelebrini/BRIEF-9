@@ -12,7 +12,7 @@ use Controllers\AdminController; ?>
     <style>
         body { font-family: 'Outfit', sans-serif; background: #0b0f1a; color: white; margin: 0; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .sidebar-item-active { background: linear-gradient(to right, rgba(79, 70, 229, 0.1), transparent); border-left: 4px solid #4f46e5; }
+        /*.sidebar-item-active { background: linear-gradient(to right, rgba(79, 70, 229, 0.1), transparent); border-left: 4px solid #4f46e5; }*/
         .blob { filter: blur(80px); position: fixed; z-index: 0; pointer-events: none; } /* Ajout de pointer-events: none */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
@@ -32,7 +32,6 @@ use Controllers\AdminController; ?>
             <div class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-bold mb-4 px-4">Menu Principal</div>
             
             <a class="sidebar-item-active flex items-center gap-4 px-4 py-4 rounded-xl text-indigo-400 font-bold transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
                 Catégories
             </a>
 
@@ -125,11 +124,17 @@ use Controllers\AdminController; ?>
                     <?php endif; ?>
                 </div>
             </div>
-
         </div>
-
-        <div></div>
     </main>
 
+                    <!--le tavail sur les commentaires-->
+    <main class="commentaire">
+        <?php foreach($Commentaires as $commentaires): ?>
+            <div>
+                <h1><?= $Commentaires['first_name'] . " " . $Commentaires['last_name'] ?></h1>
+                <p><?= $commentaires['text'] ?></p>
+            </div>
+        <?php endforeach; ?>             
+    </main>
 </body>
 </html>

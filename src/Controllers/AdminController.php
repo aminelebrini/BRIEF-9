@@ -14,6 +14,11 @@
         
         $conn = Data::getInstance()->connection();
 
+        $query = "SELECT * FROM commentaires";
+        $statement = $conn->prepare($query);
+        $statement->execute();
+        $Commentaires = $statement->fetchAll(\PDO::FETCH_ASSOC) ?? [];
+
         $query = "SELECT * FROM categories";
         $statement = $conn->prepare($query);
         $statement->execute();
@@ -21,7 +26,8 @@
 
         $this->render("admindash", [
             'title' => "Tableau de Bord Admin",
-            'Categories' => $Categories   
+            'Categories' => $Categories,
+            'Commentaires' => $Commentaires 
         ]);
 }
 
