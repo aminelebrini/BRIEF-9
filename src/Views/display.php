@@ -122,15 +122,19 @@
                             </div>
                         </div>              
                     </div>
+                    <div class="affcommunt">
+
+                    </div>
                     <br>
-                    <form method="POST" class="mt-4">
+                    <form method="POST" action="/ajouter_commentaire" class="mt-4">
                         <div class="glass p-2 rounded-2xl flex items-center gap-3 border border-white/5 focus-within:border-purple-500/30 transition-all duration-300">
-                        <input type="text" name="commentaire" 
-                                placeholder="Ajouter une réponse ou un commentaire..." 
-                                class="flex-1 bg-transparent border-none px-4 py-2 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none">
-                        <input type="hidden" value="<?= $User['id'] ?>">
+                            <input type="text" name="commentaire" 
+                                    placeholder="Ajouter une réponse ou un commentaire..." 
+                                    class="flex-1 bg-transparent border-none px-4 py-2 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none">
+                            <input type="hidden" name="reader_id" value="<?= $User['id'] ?>">
+                            <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
                             <div class="flex items-center gap-2 pr-1">
-                                <button type="submit" name="banner" value="<?= $article['id'] ?>" class="bg-slate-300/10 hover:bg-slate-300/20 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-slate-300/20 transition-all flex items-center gap-2"><i class="fa-solid fa-paper-plane"></i></button>
+                                <button type="submit" name="ajouter" class="bg-slate-300/10 hover:bg-slate-300/20 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-slate-300/20 transition-all flex items-center gap-2"><i class="fa-solid fa-paper-plane"></i></button>
                             </div>
                         </div>
                     </form>

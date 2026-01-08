@@ -15,6 +15,7 @@ $router->post("/add_category", "Controllers\\AdminController@add_category");
 $router->post("/remove_category", "Controllers\\AdminController@remove_category");
 $router->post("/addArticle", "Controllers\\AuthorController@addArticle");
 $router->post('/liker_article', "Controllers\\ReaderController@liker_article");
+$router->post('/ajouter_commentaire', "Controllers\\ReaderController@ajouter_commentaire");
 
 
 $router->generate_path();
