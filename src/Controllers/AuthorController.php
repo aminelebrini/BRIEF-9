@@ -4,16 +4,37 @@ namespace Controllers;
 
     use data\Data;
     use Core\Controller;
+    use Models\Commentaire;
 
     class AuthorController extends Controller
     {
         public function index()
         {
+            if (!(isset($_SESSION['user']) && $_SESSION['user']['role'] === 'author')) {
+                header("Location: /");
+                exit;
+            }
             $conn = Data::getInstance()->connection();
-            $query = "SELECT * FROM commentaires";
+            $query = "SELECT u.id ,u.first_name, u.last_name , c.text, c.article_id, c.user_id , c.ban_count FROM users as u INNER JOIN commentaires as c on u.id = c.user_id INNER JOIN articles as a ON c.article_id = a.id";
             $statement = $conn->prepare($query);
             $statement->execute();
             $Commentaires = $statement->fetchAll(\PDO::FETCH_ASSOC) ?? [];
+
+            $AllCommentaire = [];
+
+            foreach($Commentaires as $commetaires)
+            {
+                $banCount = $commetaires['ban_count'] ?? 0;
+                $AllCommentaire [] = new Commentaire(
+                $commetaires['id'],
+                $commetaires['text'],
+                $commetaires['first_name'],
+                $commetaires['last_name'],
+                $commetaires['article_id'],
+                $commetaires['user_id'],
+                $banCount
+            );
+        }
 
 
             $queryAllArticle = "SELECT * FROM articles";
@@ -28,7 +49,7 @@ namespace Controllers;
 
             $this->render('author', [
                 'title' => "Espace Auteur",
-                'Commentaires' => $Commentaires,
+                'AllCommentaire' => $AllCommentaire,
                 'AllArticle' => $AllArticle,
                 'Likes' => $Likes
             ]);

@@ -4,6 +4,7 @@
     use Controllers\AuthorController;
     use Controllers\ReaderController;
     use Controllers\DisplayController;
+    use Models\Commentaire;
 
     $User = $_SESSION['user'];
 ?>
@@ -26,6 +27,7 @@
     </style>
 </head>
 <body class="min-h-screen">
+
 
     <div class="blob w-full h-96 bg-indigo-600/10 top-[-10%] left-0"></div>
     <div class="blob w-96 h-96 bg-purple-600/10 bottom-0 right-0"></div>
@@ -83,18 +85,27 @@
                         </div>
                         <div>
                             <h3 class="text-sm font-bold text-white flex items-center gap-1">
-                                <?= $article['first_name'] . " " . $article['last_name'] ?>
+                                <?= $article->get_author() ?>
                                 <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293l-4 4a1 1 0 01-1.414 0l-2-2a1 1 0 111.414-1.414L9 10.586l3.293-3.293a1 1 0 111.414 1.414z"></path></svg>
                             </h3>
-                            <p class="text-[11px] text-slate-500 font-medium italic"><?= $article['date_publication'] ?></p>
+                            <p class="text-[11px] text-slate-500 font-medium italic"><?= $article->get_date_publication() ?></p>
                         </div>
                     </div>
                 </div>
 
                 <div class="px-5 pb-4">
-                    <h2 class="text-xl font-bold mb-2 text-indigo-400"><?= $article['titre'] ?></h2>
-                    <p class="text-slate-300 text-sm leading-relaxed">
-                        <?= $article['contenu'] ?>
+                    <h2 class="text-xl font-bold mb-2 text-indigo-400"><?= $article->get_titre() ?></h2>
+                    <?php if($article->get_categorie()):?>
+                    <span class="px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.1)]">
+                        <?= $article->get_categorie() ?>
+                    </span>                  
+                    <?php else: ?>
+                    <span class="hidden px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.1)]">
+                        <?= $article->get_categorie() ?>
+                    </span> 
+                    <?php endif; ?>
+                    <p class="text-slate-300 text-sm leading-relaxed mt-3">
+                        <?= $article->get_contenu() ?>
                     </p>
                 </div>
                 <div class="px-5 py-3 border-t border-white/5 bg-white/[0.01]">
@@ -104,12 +115,12 @@
                                 <div class="flex items-center gap-2">
                                     <form method="POST" action="/liker_article">
                                         <input type="hidden" name="user_id" value="<?= $User['id'] ?>">
-                                        <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
+                                        <input type="hidden" name="article_id" value="<?= $article->get_id() ?>">
                                         <button name="like" type="submit" id="like" class="flex items-center text-slate-400 hover:text-indigo-400 transition-all group"><i class="fa-regular fa-heart text-lg"></i></button>
                                     </form>
                                     <?php $likesCount = 0;?>
                                     <?php foreach($Likes as $like): ?>
-                                        <?php if($article['id'] === $like['article_id']){ 
+                                        <?php if($article->get_id() === $like['article_id']){ 
                                             $likesCount++;?>
                                         <?php } ?>
                                     <?php endforeach; ?>
@@ -122,8 +133,36 @@
                             </div>
                         </div>              
                     </div>
-                    <div class="affcommunt">
-
+                    <br>
+                    <div class="affcommunt space-y-6 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar">
+                        <?php foreach($AllCommentaire as $commentaire): 
+                                if($commentaire->get_article_id() === $article->get_id()):?>
+                            <div class="glass p-5 rounded-[2rem] border border-white/5 hover:bg-white/[0.04] transition-all duration-300">
+                                <div class="flex items-start gap-4">
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <h4 class="text-sm font-black text-white tracking-tight">
+                                                <?= htmlspecialchars($commentaire->get_first_name() . " " . $commentaire->get_last_name()) ?>
+                                            </h4>
+                                        </div>
+                                        <div class="flex flex-row items-center justify-between">
+                                            <p class="text-sm text-slate-400 leading-relaxed italic">
+                                                "<?= htmlspecialchars($commentaire->get_text()) ?>"
+                                            </p>
+                                            <div class="flex items-center gap-2 pr-1">
+                                                <form method="POST" action="/banner_Commentaire">
+                                                    <input type="hidden" name="id_user" value="<?= $commentaire->get_user_id() ?>">
+                                                    <input type="hidden" name="id_article" value="<?= $article->get_id() ?>">
+                                                    <button type="submit" name="banner" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-red-500/20 transition-all flex items-center gap-2">
+                                                    <i class="fa-solid fa-ban"></i>Banner</button>
+                                                </form>
+                                            </div> 
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     </div>
                     <br>
                     <form method="POST" action="/ajouter_commentaire" class="mt-4">
@@ -132,7 +171,7 @@
                                     placeholder="Ajouter une réponse ou un commentaire..." 
                                     class="flex-1 bg-transparent border-none px-4 py-2 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none">
                             <input type="hidden" name="reader_id" value="<?= $User['id'] ?>">
-                            <input type="hidden" name="article_id" value="<?= $article['id'] ?>">
+                            <input type="hidden" name="article_id" value="<?= $article->get_id() ?>">
                             <div class="flex items-center gap-2 pr-1">
                                 <button type="submit" name="ajouter" class="bg-slate-300/10 hover:bg-slate-300/20 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-slate-300/20 transition-all flex items-center gap-2"><i class="fa-solid fa-paper-plane"></i></button>
                             </div>

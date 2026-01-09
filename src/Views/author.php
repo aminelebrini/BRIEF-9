@@ -110,6 +110,15 @@
                 }
             }
             
+            foreach($AllCommentaire as $commentaire)
+            {
+                foreach($AllArticle as $article){
+                    if($commentaire->get_article_id() === $article['id'] && $article['author_id'] === $_SESSION['user']['id'])
+                    {
+                        $commentaireCount++;
+                    }
+                }
+            }
             
             ?>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -123,7 +132,7 @@
             </div>
             <div class="glass p-8 rounded-[2rem] border-l-4 border-pink-500">
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Commentaires reçus</p>
-                <h3 class="text-4xl font-black mt-2"><?= count($Commentaires) ?></h3>
+                <h3 class="text-4xl font-black mt-2"><?= $commentaireCount ?></h3>
             </div>
         </div>
 
@@ -279,7 +288,7 @@
 
                 <div class="flex justify-center pt-4">
                     <button type="submit" name="modif" value="<?= $_SESSION['article']['id'] ?>" class="bg-gradient-to-r from-purple-600 to-pink-600 px-12 py-4 rounded-2xl text-xs font-black text-white hover:scale-105 transition-all uppercase tracking-widest shadow-lg shadow-purple-900/40">
-                        MOdifier l'article
+                        Modifier l'article
                     </button>
                 </div>
             </form>

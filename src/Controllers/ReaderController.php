@@ -9,7 +9,10 @@
     {
         public function index()
         {
-            
+            if (!(isset($_SESSION['user']) && $_SESSION['user']['role'] === 'reader')) {
+                header("Location: /");
+                exit;
+            }
             $this->render("display",
                 [
                     'title' => "reader",

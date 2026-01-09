@@ -20,7 +20,7 @@ class Router {
         $method = $_SERVER['REQUEST_METHOD'];
 
         if(!isset($this->Route[$method][$path])) {
-            echo "404 Not Found";
+            require_once __DIR__ . "/../Views/404.php";
             return;
         }
 

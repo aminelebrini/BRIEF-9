@@ -29,27 +29,35 @@ class AuthentificationController extends Controller{
         $statement->execute([$email]);
         $user = $statement->fetch(\PDO::FETCH_ASSOC);
 
-        if($user && password_verify($password, $user['password'])) {
-            $_SESSION['user'] = $user;
+        if($user['is_blocked'] === 1)
+        {
+            echo '<div class="fixed top-[10%] left-[50%] text-white">le compte est bloque</div>';
+            exit;
+        }
+        else{
 
-            if($user['role'] === 'reader') {
-                header("Location: /display");
-                exit;
-            }
+                if($user && password_verify($password, $user['password'])) {
+                $_SESSION['user'] = $user;
 
-            if($user['role'] === 'admin') {
-                header("Location: /admindash");
-                exit;
-            }
+                if($user['role'] === 'reader') {
+                    header("Location: /display");
+                    exit;
+                }
 
-            if($user['role'] === 'author')
-            {
-                $_SESSION['author'] = $user;
-                header("Location: /author");
-                exit;
+                if($user['role'] === 'admin') {
+                    header("Location: /admindash");
+                    exit;
+                }
+
+                if($user['role'] === 'author')
+                {
+                    $_SESSION['author'] = $user;
+                    header("Location: /author");
+                    exit;
+                }
+            } else {
+                echo "Les données sont invalides !";
             }
-        } else {
-            echo "Les données sont invalides !";
         }
     }
 
@@ -73,10 +81,7 @@ class AuthentificationController extends Controller{
         $statement = $conn->prepare($registreQuery);
 
         if($statement->execute([$firstname, $lastname, $email, 'reader', $passwordHashed])) {
-            echo '<div class="bg-green-600 fixed top-[15%] left-[50%] border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
-                    Inscription réussie !
-                  </div>';
-
+        
             $_SESSION['user'] = [
                 'first_name' => $firstname,
                 'last_name' => $lastname,
@@ -96,7 +101,7 @@ class AuthentificationController extends Controller{
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(isset($_POST['signup'])) {
         AuthentificationController::signup();
-        header("Location: /home");
+        header("Location: /");
         exit;
         
     } elseif(isset($_POST['login'])) {
