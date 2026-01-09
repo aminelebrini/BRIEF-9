@@ -1,6 +1,10 @@
 <?php
 
     use Controllers\AuthentificationController;
+    use Controllers\AuthorController;
+    use Controllers\ReaderController;
+    use Controllers\DisplayController;
+    use Models\Commentaire;
 
     $User = $_SESSION['user'];
 ?>
@@ -12,6 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <title>ReadUp | Feed</title>
     <style>
         body { font-family: 'Outfit', sans-serif; background: #0b0f1a; color: white; }
@@ -22,6 +27,7 @@
     </style>
 </head>
 <body class="min-h-screen">
+
 
     <div class="blob w-full h-96 bg-indigo-600/10 top-[-10%] left-0"></div>
     <div class="blob w-96 h-96 bg-purple-600/10 bottom-0 right-0"></div>
@@ -39,75 +45,143 @@
                     <h3 class="text-xl font-bold"><?= $User['first_name'] . " " . $User['last_name']?></h3>
                     <p class="text-slate-400 text-sm italic">Lecteur Passionné</p>
                 </div>
-
+                
                 <div class="space-y-3">
                     <div class="flex justify-between text-sm p-3 bg-white/5 rounded-xl">
                         <span class="text-slate-400">livres aimés</span>
-                        <span class="font-bold">128</span>
+                        <?php $userLikesCount = 0;
+                        foreach($Likes as $like): ?>
+                            <?php if($like['user_id'] === $User['id']): 
+                                $userLikesCount++;?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                            <span class="font-bold"><?= $userLikesCount; ?></span>
                     </div>
                 </div>
 
                 <button class="w-full mt-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-sm font-bold hover:opacity-90 transition-all">
                     Éditer le profil
                 </button>
+                <form action="/logout" method="POST" class="mt-3">
+                    <button type="submit" name="logout" class="w-full py-3 rounded-xl glass border border-red-500/20 text-red-400 text-[10px] font-bold uppercase tracking-widest hover:bg-red-500/10 hover:border-red-500/50 transition-all duration-300 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            Déconnexion
+                    </button>
+                </form>
             </div>
         </aside>
 
         <main class="lg:w-2/4 space-y-8 pb-20">
-            <div class="glass p-2 rounded-2xl flex items-center">
-                <input type="text" placeholder="Rechercher une pépite..." class="w-full bg-transparent px-4 py-2 outline-none text-sm">
-                <button class="bg-white/10 p-2 rounded-xl hover:bg-white/20 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
-            </div>
-
-            <article class="glass rounded-[2.5rem] overflow-hidden group hover:border-indigo-500/50 transition-all duration-500">
-                <div class="h-64 overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=1000" 
-                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Cover">
-                </div>
-                <div class="p-8">
-                    <div class="flex gap-2 mb-4 text-[10px] uppercase tracking-widest font-bold">
-                        <span class="px-3 py-1 bg-indigo-500/20 text-indigo-400 rounded-full">Littérature</span>
-                        <span class="px-3 py-1 bg-slate-500/20 text-slate-400 rounded-full">5 min de lecture</span>
-                    </div>
-                    <h2 class="text-2xl font-bold mb-3 group-hover:text-indigo-400 transition-colors">L'art de la narration moderne</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Pourquoi certains récits nous marquent-ils plus que d'autres ? Exploration des structures narratives qui captivent l'esprit...
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-orange-400 to-red-500"></div>
-                            <span class="text-xs font-semibold">Jean-Paul S.</span>
+        <?php foreach($AllArticle as $article):?>
+            
+            <article class="glass rounded-3xl overflow-hidden border border-white/10 mb-8 max-w-2xl mx-auto transition-all hover:bg-white/[0.02]">
+    
+                <div class="p-5 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 p-0.5">
+                            <div class="w-full h-full rounded-full bg-[#0b0f1a] flex items-center justify-center overflow-hidden">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtuphMb4mq-EcVWhMVT8FCkv5dqZGgvn_QiA&s" alt="Avatar">
+                            </div>
                         </div>
-                        <a href="#" class="text-sm font-bold border-b border-indigo-500 pb-1 hover:text-indigo-400 transition-all">Lire la suite</a>
+                        <div>
+                            <h3 class="text-sm font-bold text-white flex items-center gap-1">
+                                <?= $article->get_author() ?>
+                                <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293l-4 4a1 1 0 01-1.414 0l-2-2a1 1 0 111.414-1.414L9 10.586l3.293-3.293a1 1 0 111.414 1.414z"></path></svg>
+                            </h3>
+                            <p class="text-[11px] text-slate-500 font-medium italic"><?= $article->get_date_publication() ?></p>
+                        </div>
                     </div>
+                </div>
+
+                <div class="px-5 pb-4">
+                    <h2 class="text-xl font-bold mb-2 text-indigo-400"><?= $article->get_titre() ?></h2>
+                    <?php if($article->get_categorie()):?>
+                    <span class="px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.1)]">
+                        <?= $article->get_categorie() ?>
+                    </span>                  
+                    <?php else: ?>
+                    <span class="hidden px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.1)]">
+                        <?= $article->get_categorie() ?>
+                    </span> 
+                    <?php endif; ?>
+                    <p class="text-slate-300 text-sm leading-relaxed mt-3">
+                        <?= $article->get_contenu() ?>
+                    </p>
+                </div>
+                <div class="px-5 py-3 border-t border-white/5 bg-white/[0.01]">
+                    <div class="flex items-center justify-between">
+                        <div class="flex gap-6">
+                            <div class="flex gap-6">
+                                <div class="flex items-center gap-2">
+                                    <form method="POST" action="/liker_article">
+                                        <input type="hidden" name="user_id" value="<?= $User['id'] ?>">
+                                        <input type="hidden" name="article_id" value="<?= $article->get_id() ?>">
+                                        <button name="like" type="submit" id="like" class="flex items-center text-slate-400 hover:text-indigo-400 transition-all group"><i class="fa-regular fa-heart text-lg"></i></button>
+                                    </form>
+                                    <?php $likesCount = 0;?>
+                                    <?php foreach($Likes as $like): ?>
+                                        <?php if($article->get_id() === $like['article_id']){ 
+                                            $likesCount++;?>
+                                        <?php } ?>
+                                    <?php endforeach; ?>
+                                        <span class="text-xs font-bold uppercase tracking-widest text-slate-400"><?= $likesCount; ?></span>
+                                </div>
+                                <div class="commentaire">
+                                    <button><i class="fa-regular fa-communt text-lg"></i></button>
+                                    <span class="text-xs font-bold uppercase tracking-widest text-slate-400"></span>
+                                </div>
+                            </div>
+                        </div>              
+                    </div>
+                    <br>
+                    <div class="affcommunt space-y-6 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar">
+                        <?php foreach($AllCommentaire as $commentaire): 
+                                if($commentaire->get_article_id() === $article->get_id()):?>
+                            <div class="glass p-5 rounded-[2rem] border border-white/5 hover:bg-white/[0.04] transition-all duration-300">
+                                <div class="flex items-start gap-4">
+                                    <div class="flex-1">
+                                        <div class="flex justify-between items-center mb-1">
+                                            <h4 class="text-sm font-black text-white tracking-tight">
+                                                <?= htmlspecialchars($commentaire->get_first_name() . " " . $commentaire->get_last_name()) ?>
+                                            </h4>
+                                        </div>
+                                        <div class="flex flex-row items-center justify-between">
+                                            <p class="text-sm text-slate-400 leading-relaxed italic">
+                                                "<?= htmlspecialchars($commentaire->get_text()) ?>"
+                                            </p>
+                                            <div class="flex items-center gap-2 pr-1">
+                                                <form method="POST" action="/banner_Commentaire">
+                                                    <input type="hidden" name="id_user" value="<?= $commentaire->get_user_id() ?>">
+                                                    <input type="hidden" name="id_article" value="<?= $article->get_id() ?>">
+                                                    <button type="submit" name="banner" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-red-500/20 transition-all flex items-center gap-2">
+                                                    <i class="fa-solid fa-ban"></i>Banner</button>
+                                                </form>
+                                            </div> 
+                                        </div>                                
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                    <br>
+                    <form method="POST" action="/ajouter_commentaire" class="mt-4">
+                        <div class="glass p-2 rounded-2xl flex items-center gap-3 border border-white/5 focus-within:border-purple-500/30 transition-all duration-300">
+                            <input type="text" name="commentaire" 
+                                    placeholder="Ajouter une réponse ou un commentaire..." 
+                                    class="flex-1 bg-transparent border-none px-4 py-2 text-sm text-slate-300 placeholder:text-slate-600 focus:outline-none">
+                            <input type="hidden" name="reader_id" value="<?= $User['id'] ?>">
+                            <input type="hidden" name="article_id" value="<?= $article->get_id() ?>">
+                            <div class="flex items-center gap-2 pr-1">
+                                <button type="submit" name="ajouter" class="bg-slate-300/10 hover:bg-slate-300/20 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-slate-300/20 transition-all flex items-center gap-2"><i class="fa-solid fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </article>
-
-            <article class="glass rounded-[2.5rem] overflow-hidden group hover:border-purple-500/50 transition-all duration-500">
-                <div class="p-8">
-                    <div class="flex gap-2 mb-4 text-[10px] uppercase tracking-widest font-bold">
-                        <span class="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full">Philosophie</span>
-                    </div>
-                    <h2 class="text-2xl font-bold mb-3 group-hover:text-purple-400 transition-colors">Le silence dans le tumulte digital</h2>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Retrouver le goût de la concentration profonde dans un monde saturé de notifications...
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-400 to-indigo-500"></div>
-                            <span class="text-xs font-semibold">Marie Curie</span>
-                        </div>
-                        <a href="#" class="text-sm font-bold border-b border-purple-500 pb-1 hover:text-purple-400 transition-all">Lire la suite</a>
-                    </div>
-                </div>
-            </article>
+            <?php endforeach; ?>
         </main>
-
-        <aside class="hidden lg:block lg:w-1/4 space-y-6">
+        <aside class="hidden lg:block lg:w-1/4 space-y-6 lg:top-24">
             <div class="glass p-6 rounded-[2rem]">
                 <h4 class="text-sm font-bold uppercase tracking-widest mb-4">Tendances</h4>
                 <ul class="space-y-4">
@@ -124,6 +198,5 @@
         </aside>
 
     </div>
-
 </body>
 </html>
