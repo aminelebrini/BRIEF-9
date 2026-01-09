@@ -1,6 +1,8 @@
 <?php 
     use Controllers\AuthentificationController;
     use Controllers\AuthorController;
+    use Controllers\DisplayController;
+
 ?>
 
 <!DOCTYPE html>
@@ -88,19 +90,49 @@
                 <button id="ecriver" class="bg-purple-600 px-6 py-2.5 rounded-xl text-xs font-bold hover:bg-purple-500 transition-all uppercase tracking-widest shadow-lg shadow-purple-900/40">Écrire</button>
             </div>
         </div>
-
+        <?php 
+            $articleCount = 0;
+            $likeCount = 0;
+            $commentaireCount = 0;
+            foreach($AllArticle as $article){
+                if ($article['author_id'] == $_SESSION['user']['id']){
+                    $articleCount++;
+                }
+            }
+            
+            foreach($Likes as $likes)
+            {
+                foreach($AllArticle as $article){
+                    if($likes['article_id'] === $article['id'] && $article['author_id'] === $_SESSION['user']['id'])
+                    {
+                        $likeCount++;
+                    }
+                }
+            }
+            
+            foreach($AllCommentaire as $commentaire)
+            {
+                foreach($AllArticle as $article){
+                    if($commentaire->get_article_id() === $article['id'] && $article['author_id'] === $_SESSION['user']['id'])
+                    {
+                        $commentaireCount++;
+                    }
+                }
+            }
+            
+            ?>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             <div class="glass p-8 rounded-[2rem] border-l-4 border-purple-500">
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Articles publiés</p>
-                <h3 class="text-4xl font-black mt-2"><?= count($AllArticle) ?></h3>
+                <h3 class="text-4xl font-black mt-2"><?= $articleCount ?></h3>
             </div>
             <div class="glass p-8 rounded-[2rem] border-l-4 border-blue-500">
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Likes totales</p>
-                <h3 class="text-4xl font-black mt-2">22</h3>
+                <h3 class="text-4xl font-black mt-2"><?= $likeCount ?></h3>
             </div>
             <div class="glass p-8 rounded-[2rem] border-l-4 border-pink-500">
                 <p class="text-slate-500 text-xs font-bold uppercase tracking-widest">Commentaires reçus</p>
-                <h3 class="text-4xl font-black mt-2"><?= count($Commentaires) ?></h3>
+                <h3 class="text-4xl font-black mt-2"><?= $commentaireCount ?></h3>
             </div>
         </div>
 
@@ -159,6 +191,7 @@
 
         <div class="space-y-4">
             <?php foreach($AllArticle as $article): ?>
+            <?php if ($article['author_id'] == $_SESSION['user']['id']): ?>
             <article class="article-card glass group p-6 rounded-[2rem] border border-white/5 flex items-center gap-6 hover:bg-white/[0.04] transition-all duration-300">
                 <div class="hidden md:flex flex-col items-center justify-center border-r border-white/10 pr-6 min-w-[80px]">
                     <span class="text-2xl font-black text-white"><?= $article['id'] ?></span>
@@ -174,6 +207,7 @@
                     <p class="text-sm text-slate-400 mt-1 line-clamp-1"><?= $article['contenu'] ?></p>
                 </div>
             </article>
+            <?php endif; ?>
             <?php endforeach; ?>
         </div>
     </div>
@@ -254,7 +288,7 @@
 
                 <div class="flex justify-center pt-4">
                     <button type="submit" name="modif" value="<?= $_SESSION['article']['id'] ?>" class="bg-gradient-to-r from-purple-600 to-pink-600 px-12 py-4 rounded-2xl text-xs font-black text-white hover:scale-105 transition-all uppercase tracking-widest shadow-lg shadow-purple-900/40">
-                        MOdifier l'article
+                        Modifier l'article
                     </button>
                 </div>
             </form>
