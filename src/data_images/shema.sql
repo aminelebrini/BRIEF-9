@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(250) UNIQUE NOT NULL,
     password VARCHAR(200) NOT NULL,
     role ENUM('admin', 'author', 'reader') DEFAULT 'reader',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    is_blocked INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS categories (
@@ -28,6 +29,7 @@ CREATE TABLE IF NOT EXISTS commentaires (
     date_publication DATETIME DEFAULT CURRENT_TIMESTAMP,
     article_id INT NOT NULL,
     user_id INT NOT NULL,
+    ban_count INT NOT NULL,
     FOREIGN KEY (article_id) REFERENCES articles(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
